@@ -308,7 +308,6 @@ gradle-app.setting
 *.css
 *.htm
 *.html
-*.js
 *.jsp
 *.php
 *.rss
