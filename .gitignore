@@ -305,9 +305,7 @@ gradle-app.setting
 *.asp
 *.cer
 *.csr
-*.css
 *.htm
-*.html
 *.jsp
 *.php
 *.rss
