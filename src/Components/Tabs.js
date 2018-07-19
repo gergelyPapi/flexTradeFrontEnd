@@ -66,7 +66,8 @@ class FullWidthTabs extends React.Component {
         return (
                 <FlexTradeConsumer>
                     {(value) => {
-                        const { isLoggedIn } = value;
+                        const {  } = value;
+                        const isLoggedIn = localStorage.getItem("isLoggedIn");
 
                             return isLoggedIn ? (
                                 <div className={classes.root}>
@@ -95,7 +96,6 @@ class FullWidthTabs extends React.Component {
                                                 <Typography variant="headline" color="inherit" style={styles.nameDisplay} >
                                                     We help you to make good decisions Bro! :)
                                                     <br/>
-                                                    ( . Y . )
                                                 </Typography>
                                             </div>
                                         </TabContainer>

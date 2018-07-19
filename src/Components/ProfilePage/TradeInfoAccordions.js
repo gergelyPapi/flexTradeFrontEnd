@@ -68,7 +68,8 @@ class TradeInfoAccordions extends React.Component {
     }
 
     componentWillMount () {
-        axios.get(`http://localhost:8080/stocks`)
+        const userName = localStorage.getItem("userName");
+        axios.get(`http://localhost:8080/get-all-stock-by-user/${userName}`)
             .then((response) => {
                 if (response.status === 200) {
                     this.setState({stockInfo: response.data})

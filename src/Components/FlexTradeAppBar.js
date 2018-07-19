@@ -28,11 +28,6 @@ const styles = {
     }
 };
 
-/*const appBarContent = (
-
-);*/
-
-
 function FlexTradeAppBar(props) {
     const { classes } = props;
     return (
@@ -47,7 +42,8 @@ function FlexTradeAppBar(props) {
                     </Typography>
                     <FlexTradeConsumer>
                         {(value) => {
-                            const { userName, logOut } = value;
+                            const { logOut} = value;
+                            const userName = localStorage.getItem("userName");
 
                             return userName ? (
                                 <React.Fragment>

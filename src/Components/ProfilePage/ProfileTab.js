@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TradeInfoAccordions from "./TradeInfoAccordions";
 import StockSelector from "./StockSelector";
+import Button from "@material-ui/core/es/Button/Button";
 
 const styles = theme => ({
     root: {
@@ -34,10 +35,11 @@ class ProfileTab extends React.Component {
         spacing: '24',
     };
 
-    handleChange = key => (event, value) => {
-        this.setState({
-            [key]: value,
-        });
+    displayLocal = () => {
+        alert(
+            "Store: " + localStorage.getItem("userName") + localStorage.getItem("isLoggedIn") + "\n" +
+            "State: " + this.state.userName
+        )
     };
 
     render() {
@@ -51,6 +53,9 @@ class ProfileTab extends React.Component {
                         <Grid key={1} item>
                             <StockSelector/>
                             <TradeInfoAccordions/>
+                        </Grid>
+                        <Grid key={2} item>
+                            <Button onClick={this.displayLocal}>Display Local</Button>
                         </Grid>
                     </Grid>
                 </Grid>

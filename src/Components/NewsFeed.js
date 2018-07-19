@@ -41,7 +41,7 @@ class NewsFeed extends React.Component {
                 } else {
                     console.log("Other than 200 status code")
                 }
-            }).catch(error => console.log(error));
+            }).catch(error => console.log("Error happened: " + error));
     }
 
     handleChange = panel => (event, expanded) => {

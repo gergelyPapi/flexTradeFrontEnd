@@ -48,16 +48,11 @@ class StockSelector extends React.Component {
             }).catch(error => console.log("Error happened: " + error));
     }
 
-    addStockToUser = (userName, stockCompCode, stockCompName) => {
-        let comp_code = stockCompCode;
-        let comp_name = stockCompName;
-        axios.get(`http://localhost:8080/addStock/${userName}/${comp_name}/${comp_code}`)
+    addStockToUser = (userName, stockCompCode) => {
+        axios.get(`http://localhost:8080/add-stock-to-user/${userName}/${stockCompCode}`)
             .then((response) => {
                 if (response.status === 200) {
-                    axios.get(`http://127.0.0.1:5000/get_ratios/${comp_name}/${comp_code}`)
-                        .then((response) => {
-                            console.log(response)
-                        })
+                    console.log(response)
                 } else {
                     console.log("Error fetching response")
                 }
@@ -66,7 +61,7 @@ class StockSelector extends React.Component {
 
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
-        console.log(event)
+
     };
 
     handleClickOpen = () => {
@@ -75,6 +70,7 @@ class StockSelector extends React.Component {
 
     handleClose = () => {
         this.setState({ open: false });
+        this.setState({ stock: ''})
     };
 
     handleSubmit = (e, userName) => {
@@ -109,9 +105,15 @@ class StockSelector extends React.Component {
                                     <MenuItem value={10}>
                                         <em>None</em>
                                     </MenuItem>
-                                    {this.state.stockOptions.map(value => (
-                                        <MenuItem key = {value.id} value={value.compCode}>{value.compName}</MenuItem>
-                                    ))}
+                                    <MenuItem value={"AAPL"}>Apple Inc.</MenuItem>
+                                    <MenuItem value={"GOOG"}>Google corp</MenuItem>
+                                    <MenuItem value={"MSFT"}>Microsoft Corporation</MenuItem>
+                                    <MenuItem value={"EC"}>Ecopetrol S.A.</MenuItem>
+                                    <MenuItem value={"XOM"}>Exxon Mobil Corp.</MenuItem>
+                                    <MenuItem value={"RDS-B"}>Royal Dutch Shell plc</MenuItem>
+                                    <MenuItem value={"CVX"}>Chevron Corporation</MenuItem>
+                                    <MenuItem value={"JNJ"}>Johnson & Johnson</MenuItem>
+                                    <MenuItem value={"PFE"}>Pfizer Inc.</MenuItem>
                                 </Select>
                             </FormControl>
                         </form>
