@@ -35,6 +35,7 @@ export default class RegistrationForm extends React.Component {
     }
 
     handleClickOpen = () => {
+        console.log("Closed")
         this.setState({ open: true });
     };
 
@@ -139,9 +140,9 @@ export default class RegistrationForm extends React.Component {
                                         Cancel
                                     </Button>
                                     <Button color={'primary'}
-                                            onClick={this.handleClose}
                                             onClick={(event) => {
                                                 registration(this.state.userName, this.state.email, this.state.password);
+                                                this.handleClose()
                                                 }
                                             }>
                                         GO!

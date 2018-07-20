@@ -13,6 +13,14 @@ import TableHead from "@material-ui/core/es/TableHead/TableHead";
 import TableRow from "@material-ui/core/es/TableRow/TableRow";
 import TableCell from "@material-ui/core/es/TableCell/TableCell";
 import TableBody from "@material-ui/core/es/TableBody/TableBody";
+import Button from "@material-ui/core/es/Button/Button";
+import DeleteIcon from '@material-ui/icons/Delete';
+import TrendingUp from '@material-ui/icons/TrendingUp';
+import Stars from '@material-ui/icons/Stars';
+import Autorenew from '@material-ui/icons/Autorenew';
+import ExpansionPanelActions from "@material-ui/core/es/ExpansionPanelActions/ExpansionPanelActions";
+import Grid from "@material-ui/core/es/Grid/Grid";
+import TestProfilePage from "./ProfilePageGrid";
 
 
 const styles = theme => ({
@@ -36,6 +44,10 @@ const styles = theme => ({
     },
     table: {
         width: "100%"
+    },
+    deleteButtonContainer: {
+        textAlign: "right",
+        height: "30%"
     }
 });
 
@@ -55,9 +67,8 @@ class TradeInfoAccordions extends React.Component {
         });
     };
 
-    loadStocks (e, userName) {
-        e.preventDefault();
-        axios.get(`http://localhost:8080/stock/${userName}`)
+    loadStocks = (userName) => {
+        axios.get(`http://localhost:8080/get-all-stock-by-user/${userName}`)
             .then((response) => {
                 if (response.status === 200) {
                     this.setState({stockInfo: response.data})
@@ -65,6 +76,31 @@ class TradeInfoAccordions extends React.Component {
                     console.log("Other than 200 status code")
                 }
             }).catch(error => console.log(error));
+    };
+
+    unFollowStock (event, stockCode) {
+        event.preventDefault();
+        let userName = localStorage.getItem("userName");
+        console.log("Code:" + stockCode);
+        axios.get(`http://localhost:8080/remove-stock-from-user/${userName}/${stockCode}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    // this.setState({stockInfo: response.data})
+                    console.log(response)
+                } else {
+                    console.log("Other than 200 status code")
+                }
+            }).catch(error => console.log(error));
+    }
+
+    upVote(event) {
+        event.preventDefault();
+        console.log("Voted up!")
+    }
+
+    markStock(event) {
+        event.preventDefault();
+        console.log("Marked")
     }
 
     componentWillMount () {
@@ -78,6 +114,7 @@ class TradeInfoAccordions extends React.Component {
                 }
             }).catch(error => console.log(error));
     }
+
     render() {
         const { classes } = this.props;
         const { expanded } = this.state;
@@ -97,39 +134,63 @@ class TradeInfoAccordions extends React.Component {
                         <ExpansionPanelDetails key={value.id}>
                             <Typography className={classes.root}>
                                 <Paper>
-                                  <Table>
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell>Index</TableCell>
-                                        <TableCell numeric>Value</TableCell>
-                                      </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        <TableRow key={value.id}>
-                                            <TableCell className={classes.rowIndex} >Debt to Equity Ratio</TableCell>
-                                            <TableCell className={classes.rowValue}>{value.debtEquityRatio}</TableCell>
-                                          </TableRow>
-                                        <TableRow key={value.id}>
-                                            <TableCell className={classes.rowIndex} numeric>Earnings Per Share</TableCell>
-                                            <TableCell className={classes.rowValue} numeric>{value.earningsPerShare}</TableCell>
-                                          </TableRow>
-                                        <TableRow key={value.id}>
-                                            <TableCell className={classes.rowIndex} numeric>Price To Earnings Ratio</TableCell>
-                                            <TableCell className={classes.rowValue} numeric>{value.priceEarningsRatio}</TableCell>
-                                        </TableRow>
-                                        <TableRow key={value.id}>
-                                            <TableCell className={classes.rowIndex} numeric>Return On Equity</TableCell>
-                                            <TableCell className={classes.rowValue} numeric>{value.returnOnEquity}</TableCell>
-                                        </TableRow>
-                                        <TableRow key={value.id}>
-                                            <TableCell className={classes.rowIndex} numeric>Working Capital Ratio</TableCell>
-                                            <TableCell className={classes.rowValue} numeric>{value.workingCapitalRatio}</TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                  </Table>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Index</TableCell>
+                                                <TableCell numeric>Value</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            <TableRow key={value.id}>
+                                                <TableCell className={classes.rowIndex} >Debt to Equity Ratio</TableCell>
+                                                <TableCell className={classes.rowValue}>{value.debtEquityRatio}</TableCell>
+                                            </TableRow>
+                                            <TableRow key={value.id}>
+                                                <TableCell className={classes.rowIndex} numeric>Earnings Per Share</TableCell>
+                                                <TableCell className={classes.rowValue} numeric>{value.earningsPerShare}</TableCell>
+                                            </TableRow>
+                                            <TableRow key={value.id}>
+                                                <TableCell className={classes.rowIndex} numeric>Price To Earnings Ratio</TableCell>
+                                                <TableCell className={classes.rowValue} numeric>{value.priceEarningsRatio}</TableCell>
+                                            </TableRow>
+                                            <TableRow key={value.id}>
+                                                <TableCell className={classes.rowIndex} numeric>Return On Equity</TableCell>
+                                                <TableCell className={classes.rowValue} numeric>{value.returnOnEquity}</TableCell>
+                                            </TableRow>
+                                            <TableRow key={value.id}>
+                                                <TableCell className={classes.rowIndex} numeric>Working Capital Ratio</TableCell>
+                                                <TableCell className={classes.rowValue} numeric>{value.workingCapitalRatio}</TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
                                 </Paper>
                             </Typography>
                         </ExpansionPanelDetails>
+                        <ExpansionPanelActions>
+                            <Button variant="contained" color="primary" className={classes.button}
+                                    onClick={event => this.unFollowStock(event, value.stockCode)}
+                            >
+                                Drop
+                                <DeleteIcon className={classes.rightIcon} />
+                            </Button>
+                            <Button variant="contained" color="secondary"
+                                    disabled
+                                    className={classes.button}
+                                    onClick={event => this.upVote(event)}
+                            >
+                                Show Price Chart
+                                <TrendingUp  className={classes.rightIcon} />
+                            </Button>
+                            <Button variant="contained"
+                                    color="secondary"
+                                    className={classes.button}
+                                    disabled
+                                    onClick={event => this.markStock(event)}
+                            >
+                                <Stars  className={classes.rightIcon} />
+                            </Button>
+                        </ExpansionPanelActions>
                     </ExpansionPanel>
                 ))}
             </div>
@@ -142,3 +203,4 @@ TradeInfoAccordions.propTypes = {
 };
 
 export default withStyles(styles)(TradeInfoAccordions);
+

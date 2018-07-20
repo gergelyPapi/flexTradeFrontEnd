@@ -48,7 +48,7 @@ class StockSelector extends React.Component {
             }).catch(error => console.log("Error happened: " + error));
     }
 
-    addStockToUser = (userName, stockCompCode) => {
+    addStockToUser = (event, userName, stockCompCode) => {
         axios.get(`http://localhost:8080/add-stock-to-user/${userName}/${stockCompCode}`)
             .then((response) => {
                 if (response.status === 200) {
@@ -75,7 +75,7 @@ class StockSelector extends React.Component {
 
     handleSubmit = (e, userName) => {
         this.handleClose();
-        this.addStockToUser(userName, this.state.stock );
+        this.addStockToUser(e, userName, this.state.stock );
     };
 
     render() {
@@ -141,7 +141,7 @@ class StockSelector extends React.Component {
 }
 
 StockSelector.propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(StockSelector);
