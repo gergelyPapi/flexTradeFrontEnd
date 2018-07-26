@@ -7,16 +7,61 @@ export class FlexTradeProvider extends Component {
 
     state = {
         userName: null,
-        isLoggedIn: null
+        isLoggedIn: null,
+        stockList: []
     };
 
     componentDidMount() {
         if (localStorage.getItem("userName")) {
+            let currentUserName = localStorage.getItem("userName")
             this.setState (
-                {userName: localStorage.getItem("userName"), isLoggedIn: true}
+                {userName: currentUserName, isLoggedIn: true}
             );
+            axios.get(`http://localhost:8080/get-all-stock-by-user/${currentUserName}`)
+                .then((response) => {
+                    if (response.status === 200) {
+                        this.setState({stockList: response.data})
+                    } else {
+                        console.log("Other than 200 status code")
+                    }
+                }).catch(error => console.log(error));
         }
     }
+
+    loadStocks = (userName) => {
+        axios.get(`http://localhost:8080/get-all-stock-by-user/${userName}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    this.setState({stockList: response.data})
+                } else {
+                    console.log("Other than 200 status code")
+                }
+            }).catch(error => console.log(error));
+    };
+
+    unFollowStock = (userName, stockCode) => {
+        axios.get(`http://localhost:8080/remove-stock-from-user/${userName}/${stockCode}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log(response);
+                    this.loadStocks(userName);
+                } else {
+                    console.log("Other than 200 status code")
+                }
+            }).catch(error => console.log(error));
+    };
+
+    addStockToUser = (userName, stockCompCode) => {
+        axios.get(`http://localhost:8080/add-stock-to-user/${userName}/${stockCompCode}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log(response);
+                    this.loadStocks(userName);
+                } else {
+                    console.log("Error fetching response")
+                }
+            }).catch(error => console.log("Error happened" + error));
+    };
 
 
     logIn = (name, password) => {
@@ -67,10 +112,14 @@ export class FlexTradeProvider extends Component {
                 {
                     userName: this.state.userName,
                     isLoggedIn: this.state.isLoggedIn,
+                    stockList: this.state.stockList,
                     logIn: this.logIn,
                     logOut: this.logOut,
                     registration: this.registration,
-                    deleteUser: this.deleteUser
+                    deleteUser: this.deleteUser,
+                    unFollowStock: this.unFollowStock,
+                    loadStocks: this.loadStocks,
+                    addStockToUser: this.addStockToUser
                 }
             }>
                 {this.props.children}

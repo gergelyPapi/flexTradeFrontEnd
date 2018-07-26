@@ -7,6 +7,8 @@ import StockSelector from "./StockSelector";
 import TradeInfoAccordions from "./TradeInfoAccordions";
 import Button from "@material-ui/core/es/Button/Button";
 import Autorenew from "@material-ui/icons/es/Autorenew";
+import axios from "axios/index";
+import {FlexTradeConsumer} from "../../GlobalState/FlexTradeProvider";
 
 const styles = theme => ({
     root: {
@@ -19,49 +21,64 @@ const styles = theme => ({
     },
 });
 
-function ProfilePageGrid(props) {
-    const { classes } = props;
+class ProfilePageGrid extends React.Component {
 
-    return (
-        <div className={classes.root}>
-            <Grid container spacing={24}>
-                <Grid item xs={12}>
-                    <Paper className={classes.paper}>
-                        <StockSelector/>
-                    </Paper>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper className={classes.paper}>
-                        <Button disabled variant="contained" color="secondary" className={classes.button}
-                                onClick={event => console.log("Refreshed")}
-                        >
-                            <Autorenew  className={classes.rightIcon} />
-                        </Button>
-                    </Paper>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper className={classes.paper}>
-                        <TradeInfoAccordions/>
-                    </Paper>
-                </Grid>
-                {/*<Grid item xs={6}>
-                    <Paper className={classes.paper}>xs=6</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>xs=3</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>xs=3</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>xs=3</Paper>
-                </Grid>
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>xs=3</Paper>
-                </Grid>*/}
-            </Grid>
-        </div>
-    );
+    render() {
+        const { classes } = this.props;
+
+        return (
+            <FlexTradeConsumer>
+                {(value) => {
+                    const { stockList } = value;
+
+                    return stockList.length <= 0 ? (
+                        <div className={classes.root}>
+                            <Grid container spacing={24}>
+                                <Grid item xs={12}>
+                                    <Paper className={classes.paper}>
+                                        <StockSelector/>
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Paper className={classes.paper}>
+                                        <Button disabled variant="contained" color="secondary" className={classes.button}
+                                                onClick={event => console.log("Refreshed")}
+                                        >
+                                            <Autorenew  className={classes.rightIcon} />
+                                        </Button>
+                                    </Paper>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    ) : (
+                        <div className={classes.root}>
+                            <Grid container spacing={24}>
+                                <Grid item xs={12}>
+                                    <Paper className={classes.paper}>
+                                        <StockSelector/>
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Paper className={classes.paper}>
+                                        <Button disabled variant="contained" color="secondary" className={classes.button}
+                                                onClick={event => console.log("Refreshed")}
+                                        >
+                                            <Autorenew  className={classes.rightIcon} />
+                                        </Button>
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Paper className={classes.paper}>
+                                        <TradeInfoAccordions/>
+                                    </Paper>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    )
+                }}
+            </FlexTradeConsumer>
+        );
+    }
 }
 
 ProfilePageGrid.propTypes = {

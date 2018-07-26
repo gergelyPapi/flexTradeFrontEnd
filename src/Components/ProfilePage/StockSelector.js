@@ -48,17 +48,6 @@ class StockSelector extends React.Component {
             }).catch(error => console.log("Error happened: " + error));
     }
 
-    addStockToUser = (event, userName, stockCompCode) => {
-        axios.get(`http://localhost:8080/add-stock-to-user/${userName}/${stockCompCode}`)
-            .then((response) => {
-                if (response.status === 200) {
-                    console.log(response)
-                } else {
-                    console.log("Error fetching response")
-                }
-            }).catch(error => console.log("Error happened" + error));
-    };
-
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
 
@@ -73,9 +62,8 @@ class StockSelector extends React.Component {
         this.setState({ stock: ''})
     };
 
-    handleSubmit = (e, userName) => {
+    handleSubmit = (e) => {
         this.handleClose();
-        this.addStockToUser(e, userName, this.state.stock );
     };
 
     render() {
@@ -124,10 +112,12 @@ class StockSelector extends React.Component {
                         </Button>
                         <FlexTradeConsumer>
                             {(value) => {
-                                const { userName } = value;
+                                const { userName, addStockToUser } = value;
 
                                 return (
-                                    <Button onClick={ (event) => this.handleSubmit(event, userName)} color="primary">
+                                    <Button onClick={ (event) => {addStockToUser(userName, this.state.stock ),
+                                                                    this.handleSubmit(event, userName)}}
+                                            color="primary">
                                         Confirm
                                     </Button>
                                 )
